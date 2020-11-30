@@ -44,3 +44,7 @@ Including the custom metrics implementation in Spring-boot
 4. Now you can observe the newly added metrics.
 ![project modules](images/sp-new-metrics.png)
 
+
+Additional information
+======================
+* Counters can only go up (and be reset), if your use case can go down you should use Gauge instead.

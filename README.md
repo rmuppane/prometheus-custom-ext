@@ -15,27 +15,31 @@ After you configure your KIE Server instance to use Prometheus metrics monitorin
 
 For additional infromation related to custom Prometheus metrics addition refer [here](https://access.redhat.com/documentation/en-us/red_hat_process_automation_manager/7.9/html-single/managing_red_hat_process_automation_manager_and_kie_server_settings/index#prometheus-monitoring-custom-proc_execution-server).
 
-By implementing the PrometheusMetricsProvider interface, following listners 
+By implementing the PrometheusMetricsProvider interface, with the following listners 
 1. DMNRuntimeEventListener 
 2. AgendaEventListener
 3. PhaseLifecycleListener
 4. AsynchronousJobListener
 5. DeploymentEventListener can be defineed and the custom  metrics to be collected and stored by Prometheus.
 
-To collect the additional metrics (like how many tasks assigned to specific user etc) for process or tasks or To implment custome metrics for TaskLifeCycleEventListener or other listeners follow the below steps.
+To collect the additional metrics (like how many tasks assigned to specific user etc) for the process or the task or To implment custom metrics for TaskLifeCycleEventListener, other listeners follow the below steps.
 
-Including the custom metrics in EAP implementation
+Including the custom metrics implementation in EAP 
 ==================================================
-1. In this project TaskLevelCustomPrometheusMetricListener implemented TaskLifeCycleEventListener. Added two custom metrics.
+1. In this project [TaskLevelCustomPrometheusMetricListener](org/kie/server/custom/ext/prometheus/TaskLevelCustomPrometheusMetricListener.java) implemented TaskLifeCycleEventListener. Added two custom metrics for demo purpose.
 2. Build your project (maven build) and copy the resulting JAR file into the ~/kie-server.war/WEB-INF/lib directory of your project. For example, on Red Hat JBoss EAP, the path to this directory is EAP_HOME/standalone/deployments/kie-server.war/WEB-INF/lib.
-3. To generate the metrics create Event Listner object 
-4. From now you can observe the newly added metrics.
+3. To generate the metrics for the KJAR, create an Task Event Listner object.
+![project modules](images/event-listener.png)
+4. Now you can observe the newly added metrics.
+![project modules](images/new-metrics.png)
 
 
-Including the custom metrics in Spring-boot implementation
+Including the custom metrics implementation in Spring-boot 
 ==========================================================
-1. In this project TaskLevelCustomPrometheusMetricListener implemented TaskLifeCycleEventListener. Added two custom metrics.
-2. Build your project (maven build) and add the resulting JAR file dependency in spring-boot (pom.xml) service. 
-3. To generate the metrics create Event Listner object 
-4. From now you can observe the newly added metrics.
+1. In this project [TaskLevelCustomPrometheusMetricListener](org/kie/server/custom/ext/prometheus/TaskLevelCustomPrometheusMetricListener.java) implemented TaskLifeCycleEventListener. Added two custom metrics for demo purpose.
+2. Build your project (maven build) and add the resulting JAR file as dependency in spring-boot (pom.xml) service. 
+3. To generate the metrics for the KJAR, create an Task Event Listner object.
+![project modules](images/event-listener.png)
+4. Now you can observe the newly added metrics.
+![project modules](images/sp-new-metrics.png)
 

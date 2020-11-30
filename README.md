@@ -6,8 +6,9 @@ For additional infromation configure Prometheus metrics monitoring refer [here](
 
 Versions
 ========
-EAP: JBOSS 7.3.2
-PAM: 7.9
+EAP: JBOSS 7.3.3
+
+RHPAM: 7.9
 
 Extending Prometheus metrics monitoring in KIE Server with custom metrics
 =========================================================================

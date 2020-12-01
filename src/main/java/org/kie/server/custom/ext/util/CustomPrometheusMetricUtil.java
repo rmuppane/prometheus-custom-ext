@@ -39,6 +39,14 @@ public class CustomPrometheusMetricUtil {
         .register();
 	}
 	
+	public static Gauge registerGaugeMetric1(final String metricName, String metricHelpDesc, String... labelNames) {
+		return Gauge.build()
+        .name(metricName)
+        .help(metricHelpDesc)
+        .labelNames(labelNames)
+        .register();
+	}
+	
 	public static Gauge registerGaugeMetric(final String metricName, String metricHelpDesc, String... labelNames) {
 		return Gauge.build()
         .name(metricName)

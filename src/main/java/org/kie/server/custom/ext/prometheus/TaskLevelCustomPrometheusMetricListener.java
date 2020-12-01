@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.prometheus.client.Counter;
+import io.prometheus.client.Gauge;
 
 public class TaskLevelCustomPrometheusMetricListener implements TaskLifeCycleEventListener {
 	
@@ -19,9 +20,11 @@ public class TaskLevelCustomPrometheusMetricListener implements TaskLifeCycleEve
 	
 	private  KieContainerInstance kieContainer;
 	
-	private static Counter numberOfTasksAssigned = null;
+	// As the number of tasks assigned may increase or decrease, so defining it as Gauge.
+	private static Gauge numberOfTasksAssigned = null;
 	
 	private static Counter numberOfTasksCompleted = null;
+	
 	
 	public TaskLevelCustomPrometheusMetricListener(final KieContainerInstance kieContainer) {
 		 this.kieContainer = kieContainer;
@@ -35,7 +38,7 @@ public class TaskLevelCustomPrometheusMetricListener implements TaskLifeCycleEve
 		LOGGER.debug("Initialising the metrics");
 		// Register intesa_kie_server_user_tasks_assigned_total
 		if(!CustomPrometheusMetricUtil.doesMetricRegistered(CustomPrometheusMetricConstants.USER_TASKS_ASSIGNED_TOTAL)) {
-			numberOfTasksAssigned = CustomPrometheusMetricUtil.registerCounterMetric(CustomPrometheusMetricConstants.USER_TASKS_ASSIGNED_TOTAL, 
+			numberOfTasksAssigned = CustomPrometheusMetricUtil.registerGaugeMetric1(CustomPrometheusMetricConstants.USER_TASKS_ASSIGNED_TOTAL, 
 					CustomPrometheusMetricConstants.USER_TASKS_ASSIGNED_TOTAL_HELP, 
 					CustomPrometheusMetricConstants.LABEL_CONTAINERID, CustomPrometheusMetricConstants.LABEL_PROCESSID, CustomPrometheusMetricConstants.LABEL_USER);
 		}
@@ -97,6 +100,9 @@ public class TaskLevelCustomPrometheusMetricListener implements TaskLifeCycleEve
 
 	public void beforeTaskReleasedEvent(TaskEvent event) {
 		System.out.println(new Object(){}.getClass().getEnclosingMethod().getName() + " Task perforemd User [" + event.getTaskContext().getUserId() + "] ActualOwner [" + event.getTask().getTaskData().getActualOwner() +"]");
+		if(event.getTask() != null & event.getTask().getTaskData() != null && event.getTask().getTaskData().getActualOwner() != null && event.getTask().getTaskData().getActualOwner().getId() != null) {
+			numberOfTasksAssigned.labels(event.getTask().getTaskData().getDeploymentId(), event.getTask().getTaskData().getProcessId(), event.getTask().getTaskData().getActualOwner().getId()).dec();
+		}
 	}
 
 	public void beforeTaskResumedEvent(TaskEvent event) {
